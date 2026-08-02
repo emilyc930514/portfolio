@@ -192,7 +192,7 @@
     <div class="masthead-row">
       <div>
         <div class="eyebrow">Marketing &middot; AI Tools &middot; Web Build</div>
-        <h1>Emily Chang</h1>
+        <h1>Your Name Here</h1>
       </div>
       <div class="masthead-meta">Marketing generalist, learning to build the tools marketers actually use.</div>
     </div>
@@ -213,6 +213,10 @@
   </div>
   <div class="wrap">
     <div class="desk">
+      <div class="proof" style="border-bottom:1.5px solid var(--border);">
+        <label for="brand-context">Brand voice / audience <span style="text-transform:none; font-weight:400;">(optional — improves the Brand Fit score)</span></label>
+        <textarea id="brand-context" style="min-height:60px; font-size:15px;" placeholder="e.g. Playful, budget-friendly fintech app for Gen Z. Avoid corporate jargon."></textarea>
+      </div>
       <div class="proof">
         <label for="copy-input">Copy under review</label>
         <textarea id="copy-input" placeholder="e.g. Sign up today and never miss a deal again!">Sign up today and never miss a deal again!</textarea>
@@ -329,8 +333,8 @@
         <p>Built as a working prototype &mdash; swap the name, case studies, and links with your own before publishing.</p>
       </div>
       <div class="contact-links">
-        <a href="mailto:emilyc930514@gmail.com" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Email</a>
-        <a href="https://www.linkedin.com/in/emily-chang60727/" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 13v4"/></svg>LinkedIn</a>
+        <a href="mailto:you@example.com" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Email</a>
+        <a href="#" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 13v4"/></svg>LinkedIn</a>
         <a href="#" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Resume (PDF)</a>
       </div>
     </div>
@@ -341,7 +345,7 @@
   <div class="wrap">
     <div class="fine">
       <span>Curious, builder mindset, always shipping.</span>
-      <span>&copy; 2026 Emily Chang</span>
+      <span>&copy; 2026 Your Name Here</span>
     </div>
   </div>
 </footer>
@@ -353,14 +357,28 @@ const loading = document.getElementById('loading');
 const results = document.getElementById('results');
 const errorBox = document.getElementById('tool-error');
 
+const brandInput = document.getElementById('brand-context');
+
 btn.addEventListener('click', async () => {
   const copy = input.value.trim();
   if (!copy) return;
+
+  const brand = brandInput.value.trim();
+  const hasBrand = brand.length > 0;
 
   errorBox.classList.remove('show');
   results.classList.remove('show');
   loading.classList.add('show');
   btn.disabled = true;
+
+  // When no brand context is given, we don't ask the AI to invent a "Brand Fit"
+  // score out of nothing. Instead we ask for "Tone Consistency" — whether the
+  // copy's own voice holds together internally — which is something the AI
+  // can actually assess without external information.
+  const fourthMetricKey = hasBrand ? "brand_fit" : "tone_consistency";
+  const fourthMetricInstruction = hasBrand
+    ? `"brand_fit": <0-100 integer, how well the copy matches this brand voice/audience: "${brand}">`
+    : `"tone_consistency": <0-100 integer, how internally consistent and coherent the copy's own tone is — no external brand info was provided, so do not invent a brand fit judgment>`;
 
   const prompt = `You are a sharp, concise marketing editor reviewing a piece of ad/marketing copy. Analyze the following copy and respond with ONLY valid JSON, no markdown fences, no preamble, matching exactly this shape:
 
@@ -370,7 +388,7 @@ btn.addEventListener('click', async () => {
     "clarity": <0-100 integer>,
     "hook_strength": <0-100 integer>,
     "urgency": <0-100 integer>,
-    "brand_fit": <0-100 integer>
+    ${fourthMetricInstruction}
   },
   "notes": [
     {"flag": "one or two word tag like 'Vague' or 'Weak hook'", "original": "short quoted fragment from the copy", "comment": "one sentence explaining the issue"}
@@ -381,11 +399,13 @@ btn.addEventListener('click', async () => {
 Give 2 to 4 notes. Copy to review: "${copy}"`;
 
   try {
+    // This calls OUR OWN backend (api/analyze.js), which holds the real API key.
+    // The browser never sees the key — this is the safe pattern for any AI-powered site.
     const response = await fetch("/api/analyze", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ prompt })
-});
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
 
     if (!response.ok) throw new Error("Request failed");
     const data = await response.json();
@@ -393,7 +413,7 @@ Give 2 to 4 notes. Copy to review: "${copy}"`;
     const clean = raw.replace(/^```json/i, "").replace(/```$/, "").trim();
     const parsed = JSON.parse(clean);
 
-    renderResults(parsed);
+    renderResults(parsed, fourthMetricKey);
   } catch (err) {
     errorBox.textContent = "The desk couldn't process that one — try again in a moment.";
     errorBox.classList.add('show');
@@ -403,14 +423,21 @@ Give 2 to 4 notes. Copy to review: "${copy}"`;
   }
 });
 
-function renderResults(data){
+function renderResults(data, fourthMetricKey){
   document.getElementById('verdict-text').textContent = data.verdict || "—";
   document.getElementById('rewrite-text').textContent = data.rewrite || "—";
 
   const scoresEl = document.getElementById('scores');
   scoresEl.innerHTML = "";
-  const labels = { clarity: "Clarity", hook_strength: "Hook Strength", urgency: "Urgency", brand_fit: "Brand Fit" };
-  Object.entries(labels).forEach(([key, label]) => {
+  const labels = {
+    clarity: "Clarity",
+    hook_strength: "Hook Strength",
+    urgency: "Urgency",
+    brand_fit: "Brand Fit",
+    tone_consistency: "Tone Consistency"
+  };
+  const keysToShow = ["clarity", "hook_strength", "urgency", fourthMetricKey];
+  keysToShow.filter(k => k).map(k => [k, labels[k]]).forEach(([key, label]) => {
     const val = (data.scores && data.scores[key]) || 0;
     const el = document.createElement('div');
     el.className = 'score';
