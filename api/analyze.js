@@ -23,6 +23,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
         max_tokens: 1000,
+        temperature: 0.2, // lower = more consistent scores across repeated runs on the same copy
         messages: [{ role: "user", content: prompt }]
       })
     });
