@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/review-website.js": {
+      "maxDuration": 30
+    }
+  }
+}
