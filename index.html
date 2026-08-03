@@ -3,361 +3,450 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marketing Portfolio</title>
+<title>Marketing Portfolio — AI Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FFFFFF;
-    --bg-soft:#EEF2FC;
-    --ink:#14213D;
+    --bg:#F6F8FE;
+    --card:#FFFFFF;
+    --ink:#12172B;
     --ink-soft:#5B6478;
-    --blue:#2F5FE0;
-    --blue-dark:#1E3FB0;
-    --blue-soft:#DCE6FB;
-    --border:#E3E7F1;
+    --blue:#3B6EF5;
+    --blue-dark:#2C56D6;
+    --blue-soft:#E9EFFE;
+    --border:#E7ECF7;
+    --green:#16A34A; --green-soft:#DCFCE7;
+    --amber:#2563EB; --amber-soft:#DBEAFE;
+    --gray:#6B7280; --gray-soft:#EEF0F4;
+    --shadow:0 2px 18px rgba(20,30,70,0.06);
+  }
+  [data-theme="dark"]{
+    --bg:#0E1220;
+    --card:#161B2E;
+    --ink:#F1F3FA;
+    --ink-soft:#9AA3B8;
+    --blue:#5B87FF;
+    --blue-dark:#7C9EFF;
+    --blue-soft:#1D2440;
+    --border:#262D45;
+    --green-soft:#123322; --amber-soft:#152241; --gray-soft:#1D2236;
+    --shadow:0 2px 18px rgba(0,0,0,0.35);
   }
 
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Inter', sans-serif;
-    line-height:1.55;
+    background:var(--bg); color:var(--ink); font-family:'Inter', sans-serif; line-height:1.55;
+    transition:background 0.2s ease, color 0.2s ease;
   }
   @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
 
-  .wrap{ max-width:1100px; margin:0 auto; padding:0 32px; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+  .accent{ color:var(--blue); }
+  .hidden{ display:none !important; }
 
-  /* ---------- Masthead ---------- */
-  header.masthead{ background:var(--bg-soft); padding:34px 0 24px; }
-  .masthead-row{ display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:20px; }
-  .eyebrow{
-    font-size:12px; letter-spacing:0.12em; text-transform:uppercase;
-    color:var(--blue); font-weight:700; margin-bottom:8px;
+  /* ---------- Nav ---------- */
+  header.nav{ padding:22px 0; position:sticky; top:0; background:var(--bg); z-index:20; }
+  .navbar{ display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+  .logo{ font-size:19px; font-weight:800; }
+  .logo .logo-first{ color:var(--blue); }
+  nav.navlinks{ display:flex; gap:28px; font-size:14px; font-weight:600; }
+  nav.navlinks a{ color:var(--ink); text-decoration:none; }
+  nav.navlinks a:hover{ color:var(--blue); }
+  #theme-toggle{
+    width:38px; height:38px; border-radius:50%; border:1.5px solid var(--border);
+    background:var(--card); cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
-  .masthead h1{
-    font-size:clamp(34px, 5.5vw, 52px); font-weight:800; letter-spacing:-0.02em; color:var(--ink);
-  }
-  .masthead-meta{
-    max-width:260px; font-size:14px; color:var(--ink-soft);
-    border-left:3px solid var(--blue); padding-left:14px;
-  }
-  nav.tabs{ display:flex; gap:26px; margin-top:20px; font-size:13px; font-weight:600; color:var(--ink); flex-wrap:wrap; }
-  nav.tabs a{ color:var(--ink); text-decoration:none; }
-  nav.tabs a:hover, nav.tabs a:focus-visible{ color:var(--blue); }
+  #theme-toggle svg{ width:17px; height:17px; stroke:var(--blue); }
 
-  section{ padding:64px 0; }
-  section.alt{ background:var(--bg-soft); }
-
-  .section-label{
-    font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
-    color:var(--blue); margin-bottom:8px;
-  }
-  .section-title{ font-size:clamp(24px, 3.6vw, 32px); font-weight:800; color:var(--ink); margin-bottom:22px; }
-
-  /* ---------- Icon badges ---------- */
-  .icon-badge{
-    width:52px; height:52px; border-radius:50%;
-    background:var(--blue-soft); display:flex; align-items:center; justify-content:center;
-    margin-bottom:16px;
-  }
-  .icon-badge svg{ width:24px; height:24px; stroke:var(--blue); }
+  section.section{ padding:46px 0; }
 
   /* ---------- Buttons ---------- */
   .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    font-family:'Inter', sans-serif; font-size:14px; font-weight:600;
-    padding:12px 20px; border-radius:10px; text-decoration:none; cursor:pointer;
-    border:1.5px solid var(--border); background:var(--bg); color:var(--ink);
-    transition:border-color 0.15s ease, background 0.15s ease;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-family:'Inter'; font-size:14px; font-weight:700; padding:13px 22px; border-radius:12px;
+    border:1.5px solid var(--border); background:var(--card); color:var(--ink); text-decoration:none; cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
   }
-  .btn:hover, .btn:focus-visible{ border-color:var(--blue); }
-  .btn.primary{
-    background:var(--blue); color:#fff; border-color:var(--blue);
-  }
-  .btn.primary:hover, .btn.primary:focus-visible{ background:var(--blue-dark); }
-  .btn:disabled{ opacity:0.5; cursor:default; }
-  .btn svg{ width:16px; height:16px; }
+  .btn:hover{ border-color:var(--blue); }
+  .btn.primary{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .btn.primary:hover{ background:var(--blue-dark); }
+  .btn.block{ width:100%; }
+  .btn:disabled{ opacity:0.55; cursor:default; }
 
-  /* ---------- Tool ---------- */
-  .tool-intro p{ max-width:560px; color:var(--ink-soft); font-size:16px; margin-bottom:26px; }
+  /* ---------- Hero ---------- */
+  .hero{ display:grid; grid-template-columns:1fr 1.05fr; gap:40px; padding:34px 0 20px; align-items:start; }
+  @media (max-width:900px){ .hero{ grid-template-columns:1fr; } }
 
-  .desk{
-    border:1.5px solid var(--border); border-radius:16px; overflow:hidden; background:var(--bg);
+  .badge-pill{
+    display:inline-block; background:var(--blue-soft); color:var(--blue); font-size:13px; font-weight:700;
+    padding:7px 14px; border-radius:20px; margin-bottom:18px;
   }
-  .proof{ padding:24px 26px; }
-  .proof label{
-    display:block; font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-    color:var(--ink-soft); margin-bottom:12px;
-  }
-  .proof textarea{
-    width:100%; min-height:110px; border:none; outline:none; resize:vertical;
-    font-family:'Inter', sans-serif; font-size:18px; color:var(--ink); background:transparent;
-  }
-  .proof textarea::placeholder{ color:#A9B0C2; }
+  .hero-left h1{ font-size:clamp(32px, 4.6vw, 46px); font-weight:800; line-height:1.12; margin-bottom:18px; }
+  .hero-left .lead{ color:var(--ink-soft); font-size:16px; max-width:440px; margin-bottom:26px; }
+  .hero-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:22px; }
+  .credential{ font-size:13.5px; color:var(--ink-soft); display:flex; align-items:center; gap:8px; }
+  .credential svg{ width:16px; height:16px; stroke:var(--ink-soft); }
 
-  .desk-controls{
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-    padding:16px 26px; background:var(--bg-soft); border-top:1.5px solid var(--border);
+  /* ---------- Featured Tool Card ---------- */
+  .tool-card{
+    background:var(--card); border:1.5px solid var(--border); border-radius:22px; padding:26px;
+    box-shadow:var(--shadow);
   }
-  .desk-controls .hint{ font-size:13px; color:var(--ink-soft); display:flex; align-items:center; gap:8px; }
-  .desk-controls .hint svg{ width:16px; height:16px; stroke:var(--blue); }
+  .section-label{ font-size:12px; font-weight:800; letter-spacing:0.09em; text-transform:uppercase; color:var(--blue); margin-bottom:8px; }
+  .tool-card h2{ font-size:22px; font-weight:800; margin-bottom:6px; }
+  .tool-card > p{ color:var(--ink-soft); font-size:14px; margin-bottom:18px; }
+
+  .tool-card-body{ display:flex; gap:22px; align-items:flex-start; }
+  @media (max-width:560px){ .tool-card-body{ flex-direction:column; } }
+  .tool-input-col{ flex:1; min-width:0; }
+
+  textarea{
+    width:100%; border:1.5px solid var(--border); border-radius:12px; padding:14px;
+    font-family:'Inter'; font-size:14.5px; color:var(--ink); background:var(--bg); resize:vertical; outline:none;
+  }
+  textarea:focus{ border-color:var(--blue); }
+  #copy-input{ min-height:96px; }
+  .char-count{ text-align:right; font-size:12px; color:var(--ink-soft); margin-top:6px; font-family:'IBM Plex Mono', monospace; }
+
+  .link-toggle{
+    background:none; border:none; color:var(--blue); font-weight:600; font-size:13px; cursor:pointer;
+    padding:10px 0 4px; text-align:left;
+  }
+  #brand-context-wrap{ margin-bottom:6px; }
+  #brand-context{ min-height:56px; font-size:13.5px; }
+
+  .tool-card-body #analyze{ margin-top:14px; }
+  .tool-hint{ font-size:12.5px; color:var(--ink-soft); margin-top:10px; }
+
+  .tool-score-col{ width:130px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; padding-top:6px; }
+  .gauge-wrap{ position:relative; width:118px; height:118px; }
+  .gauge-wrap svg{ width:100%; height:100%; transform:rotate(-90deg); }
+  .gauge-track{ fill:none; stroke:var(--border); stroke-width:9; }
+  .gauge-fill{ fill:none; stroke:var(--blue); stroke-width:9; stroke-linecap:round; transition:stroke-dashoffset 0.7s ease; }
+  .gauge-num{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .gauge-num .val{ font-family:'IBM Plex Mono', monospace; font-size:26px; font-weight:600; }
+  .gauge-num .max{ font-size:11px; color:var(--ink-soft); }
+  .score-label{ font-size:12px; color:var(--ink-soft); margin-top:8px; text-align:center; }
 
   .loading-row{
-    display:none; align-items:center; gap:10px; padding:18px 26px; margin-top:14px;
-    font-size:13px; color:var(--ink-soft); border:1.5px solid var(--border); border-radius:12px;
+    display:none; align-items:center; gap:10px; margin-top:16px; padding:14px 18px;
+    border:1.5px solid var(--border); border-radius:12px; font-size:13px; color:var(--ink-soft);
   }
   .loading-row.show{ display:flex; }
   .dot{ width:6px; height:6px; background:var(--blue); border-radius:50%; animation:pulse 1s infinite ease-in-out; }
-  .dot:nth-child(2){ animation-delay:0.15s; }
-  .dot:nth-child(3){ animation-delay:0.3s; }
-  @keyframes pulse{ 0%,100%{opacity:0.25;} 50%{opacity:1;} }
+  .dot:nth-child(2){ animation-delay:.15s; } .dot:nth-child(3){ animation-delay:.3s; }
+  @keyframes pulse{ 0%,100%{opacity:.25;} 50%{opacity:1;} }
 
   #tool-error{
-    display:none; margin-top:14px; padding:14px 20px; border-radius:12px;
-    font-size:13px; color:#B23A2A; background:#FBEAE7; border:1.5px solid #F0C9C1;
+    display:none; margin-top:14px; padding:12px 16px; border-radius:12px; font-size:13px;
+    color:#B23A2A; background:#FBEAE7; border:1.5px solid #F0C9C1;
   }
   #tool-error.show{ display:block; }
 
-  #results{ display:none; margin-top:20px; border:1.5px solid var(--border); border-radius:16px; overflow:hidden; }
+  #results{ display:none; margin-top:18px; border-top:1.5px solid var(--border); padding-top:18px; }
   #results.show{ display:block; }
+  .verdict{ font-size:16px; font-weight:700; margin-bottom:16px; }
 
-  .verdict{ padding:22px 26px; border-bottom:1.5px solid var(--border); }
-  .verdict p{ font-size:20px; font-weight:700; color:var(--ink); }
+  .mini-scores{ display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:14px; margin-bottom:16px; }
+  .mini-score .num{ font-family:'IBM Plex Mono', monospace; font-size:18px; font-weight:600; color:var(--blue); }
+  .mini-score .bar{ height:5px; background:var(--blue-soft); border-radius:4px; margin:6px 0; overflow:hidden; }
+  .mini-score .bar-fill{ height:100%; background:var(--blue); width:0%; border-radius:4px; transition:width .6s ease; }
+  .mini-score .label{ font-size:11.5px; color:var(--ink-soft); font-weight:600; }
 
-  .scores{
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
-    border-bottom:1.5px solid var(--border);
+  .notes-list .note{ display:flex; gap:12px; padding:10px 0; border-bottom:1px dashed var(--border); }
+  .notes-list .note:last-child{ border-bottom:none; }
+  .notes-list .flag{
+    font-size:11.5px; font-weight:700; color:var(--blue); background:var(--blue-soft);
+    padding:3px 9px; border-radius:20px; white-space:nowrap; height:fit-content;
   }
-  .score{ padding:20px 26px; border-right:1.5px solid var(--border); }
-  .score:last-child{ border-right:none; }
-  .score .num{ font-family:'IBM Plex Mono', monospace; font-size:28px; font-weight:600; color:var(--blue); }
-  .score .num span{ font-size:13px; color:var(--ink-soft); }
-  .score .bar{ height:6px; background:var(--blue-soft); border-radius:4px; margin-top:10px; overflow:hidden; }
-  .score .bar-fill{ height:100%; background:var(--blue); width:0%; border-radius:4px; transition:width 0.6s ease; }
-  .score .label{ font-size:12px; font-weight:600; color:var(--ink-soft); margin-top:8px; }
+  .notes-list .note p{ font-size:13.5px; }
+  .notes-list .orig{ color:var(--ink-soft); text-decoration:line-through; text-decoration-color:#C6CEDF; }
 
-  .margin-notes{ padding:22px 26px; border-bottom:1.5px solid var(--border); }
-  .margin-notes .note{ display:flex; gap:14px; padding:12px 0; border-bottom:1px dashed var(--border); }
-  .margin-notes .note:last-child{ border-bottom:none; }
-  .margin-notes .flag{
-    font-size:12px; font-weight:700; color:var(--blue); background:var(--blue-soft);
-    padding:4px 10px; border-radius:20px; white-space:nowrap; height:fit-content;
+  .rewrite-block{ margin-top:16px; background:var(--blue-soft); border-radius:12px; padding:14px 16px; }
+  .rewrite-block .section-label{ margin-bottom:6px; }
+  .rewrite-block p{ font-weight:700; font-size:15px; }
+
+  /* ---------- Cards / generic ---------- */
+  .card{ background:var(--card); border:1.5px solid var(--border); border-radius:22px; padding:28px; box-shadow:var(--shadow); }
+
+  /* ---------- About ---------- */
+  .about-card{ display:flex; gap:24px; align-items:flex-start; }
+  .avatar{
+    width:76px; height:76px; border-radius:50%; background:var(--blue-soft); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
   }
-  .margin-notes .note p{ font-size:14.5px; color:var(--ink); }
-  .margin-notes .note .orig{ color:var(--ink-soft); text-decoration:line-through; text-decoration-color:#C6CEDF; }
+  .avatar svg{ width:36px; height:36px; stroke:var(--blue); }
+  .about-card h3{ font-size:19px; font-weight:800; margin-bottom:10px; }
+  .about-card p{ color:var(--ink-soft); font-size:14.5px; max-width:640px; }
+  @media (max-width:520px){ .about-card{ flex-direction:column; } }
 
-  .rewrite{ padding:22px 26px; background:var(--bg-soft); }
-  .rewrite p{ font-size:20px; font-weight:700; color:var(--ink); margin-top:4px; }
+  /* ---------- Things I'm Building ---------- */
+  .section-head{ margin-bottom:22px; }
+  .section-head h2{ font-size:24px; font-weight:800; margin-bottom:6px; }
+  .section-head p{ color:var(--ink-soft); font-size:14.5px; }
 
-  /* ---------- Case studies ---------- */
-  .cases{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
-  .case{ background:var(--bg); border:1.5px solid var(--border); border-radius:16px; padding:26px; }
-  .case .tag{ font-size:12px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; }
-  .case h3{ font-size:19px; font-weight:800; color:var(--ink); margin-bottom:10px; }
-  .case p{ color:var(--ink-soft); font-size:14.5px; margin-bottom:16px; }
-  .case .metrics{ display:flex; gap:26px; }
-  .case .metrics b{ font-family:'IBM Plex Mono', monospace; color:var(--blue); display:block; font-size:18px; }
-  .case .metrics span{ font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; }
-
-  /* ---------- Skills ---------- */
-  .skills-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:30px; }
-  .skill h4{ font-size:15px; font-weight:700; color:var(--ink); margin-bottom:8px; }
-  .skill p{ color:var(--ink-soft); font-size:14.5px; }
-
-  /* ---------- Contact banner ---------- */
-  .contact-banner{
-    background:var(--bg-soft); border-radius:20px; padding:36px 36px;
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:22px;
+  .cards-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; }
+  .build-card{ background:var(--card); border:1.5px solid var(--border); border-radius:20px; padding:22px; box-shadow:var(--shadow); }
+  .build-card-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+  .build-card .icon-badge{
+    width:44px; height:44px; border-radius:12px; background:var(--blue-soft); display:flex; align-items:center; justify-content:center;
   }
-  .contact-banner h2{ font-size:clamp(26px, 4vw, 34px); font-weight:800; margin-bottom:8px; }
-  .contact-banner p{ color:var(--ink-soft); font-size:14px; max-width:420px; }
-  .contact-links{ display:flex; gap:12px; flex-wrap:wrap; }
+  .build-card .icon-badge svg{ width:20px; height:20px; stroke:var(--blue); }
+  .build-card h4{ font-size:17px; font-weight:800; margin-bottom:8px; }
+  .build-card p{ color:var(--ink-soft); font-size:13.5px; margin-bottom:16px; min-height:52px; }
 
-  /* ---------- Footer ---------- */
-  footer{ padding:28px 0; }
-  footer .fine{ font-size:12px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .badge{ font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:20px; }
+  .badge.live{ background:var(--green-soft); color:var(--green); }
+  .badge.progress{ background:var(--amber-soft); color:var(--amber); }
+  .badge.soon{ background:var(--gray-soft); color:var(--gray); }
 
-  @media (max-width:640px){
-    .masthead-meta{ border-left:none; padding-left:0; border-top:3px solid var(--blue); padding-top:10px; max-width:none; }
-  }
+  .link-arrow{ font-size:13.5px; font-weight:700; color:var(--blue); text-decoration:none; }
+  .link-arrow.disabled{ color:var(--ink-soft); cursor:default; }
+
+  .mini-chart{ margin-top:6px; }
+
+  /* ---------- Why I built them ---------- */
+  .why-card h3{ font-size:19px; font-weight:800; margin-bottom:12px; }
+  .why-card p{ color:var(--ink-soft); font-size:15px; max-width:760px; }
+
+  /* ---------- Contact ---------- */
+  .contact-card{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:22px; }
+  .contact-card h3{ font-size:20px; font-weight:800; margin-bottom:8px; }
+  .contact-card > div:first-child p{ color:var(--ink-soft); font-size:14px; max-width:360px; }
+  .contact-links{ display:flex; flex-direction:column; gap:10px; }
+  .contact-links a{ display:flex; align-items:center; gap:9px; font-size:14px; font-weight:600; color:var(--ink); text-decoration:none; }
+  .contact-links a:hover{ color:var(--blue); }
+  .contact-links svg{ width:17px; height:17px; stroke:var(--blue); flex-shrink:0; }
+
+  footer{ text-align:center; padding:30px 0 40px; font-size:12.5px; color:var(--ink-soft); }
 </style>
 </head>
 <body>
 
-<header class="masthead">
-  <div class="wrap">
-    <div class="masthead-row">
-      <div>
-        <div class="eyebrow">Marketing &middot; AI Tools &middot; Web Build</div>
-        <h1>Your Name Here</h1>
-      </div>
-      <div class="masthead-meta">Marketing generalist, learning to build the tools marketers actually use.</div>
-    </div>
-    <nav class="tabs">
-      <a href="#desk">The Copy Desk</a>
-      <a href="#cases">Case Studies</a>
-      <a href="#skills">Skills</a>
+<header class="nav">
+  <div class="wrap navbar">
+    <div class="logo"><span class="logo-first">Your</span> Name</div>
+    <nav class="navlinks">
+      <a href="#building">Projects</a>
+      <a href="#about">About</a>
+      <a href="#contact">Resume</a>
       <a href="#contact">Contact</a>
     </nav>
+    <button id="theme-toggle" aria-label="Toggle dark mode">
+      <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
   </div>
 </header>
 
-<section id="desk">
-  <div class="wrap tool-intro">
-    <div class="section-label">Live Tool &mdash; 01</div>
-    <h2 class="section-title">The Copy Desk</h2>
-    <p>Paste a headline, subject line, or ad copy. It gets scored, annotated, and rewritten by AI in real time.</p>
+<section class="hero wrap">
+  <div class="hero-left">
+    <span class="badge-pill">Hi! I'm [Your Name] 👋</span>
+    <h1>Building AI tools that make marketing work a little <span class="accent">easier.</span></h1>
+    <p class="lead">I'm a marketing [student/professional] who loves combining data, AI, and automation to solve real marketing problems.</p>
+    <div class="hero-actions">
+      <a href="#copy-desk-tool" class="btn primary">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 10l-5.1 2.1L12 17l-1.9-4.9L5 10l5.1-2.1L12 3z"/></svg>
+        Try AI Copy Desk
+      </a>
+      <a href="#building" class="btn">See my projects ↓</a>
+    </div>
+    <div class="credential">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
+      Your School &middot; Your Program
+    </div>
   </div>
-  <div class="wrap">
-    <div class="desk">
-      <div class="proof" style="border-bottom:1.5px solid var(--border);">
-        <label for="brand-context">Brand voice / audience <span style="text-transform:none; font-weight:400;">(optional — improves the Brand Fit score)</span></label>
-        <textarea id="brand-context" style="min-height:60px; font-size:15px;" placeholder="e.g. Playful, budget-friendly fintech app for Gen Z. Avoid corporate jargon."></textarea>
-      </div>
-      <div class="proof">
-        <label for="copy-input">Copy under review</label>
-        <textarea id="copy-input" placeholder="e.g. Sign up today and never miss a deal again!">Sign up today and never miss a deal again!</textarea>
-      </div>
-      <div class="desk-controls">
-        <span class="hint">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 10l-5.1 2.1L12 17l-1.9-4.9L5 10l5.1-2.1L12 3z"/></svg>
-          Scored on clarity, hook strength, urgency &amp; brand fit
-        </span>
-        <button id="analyze" class="btn primary">Send to desk
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </div>
-    </div>
 
-    <div class="loading-row" id="loading">
-      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      <span>Marking up the copy&hellip;</span>
-    </div>
+  <div class="hero-right" id="copy-desk-tool">
+    <div class="tool-card">
+      <div class="section-label">Featured Tool</div>
+      <h2>AI Copy Desk</h2>
+      <p>Get AI-powered feedback and suggestions to improve your marketing copy.</p>
 
-    <div id="tool-error"></div>
+      <div class="tool-card-body">
+        <div class="tool-input-col">
+          <textarea id="copy-input" maxlength="2000" placeholder="Paste your marketing copy here...">Sign up today and never miss a deal again!</textarea>
+          <div class="char-count"><span id="char-count">0</span>/2000</div>
 
-    <div id="results">
-      <div class="verdict">
-        <div class="section-label">Editor's Verdict</div>
-        <p id="verdict-text">&mdash;</p>
+          <button id="brand-toggle" class="link-toggle">+ Add brand voice / audience (optional)</button>
+          <div id="brand-context-wrap" class="hidden">
+            <textarea id="brand-context" placeholder="e.g. Playful, budget-friendly fintech app for Gen Z. Avoid corporate jargon."></textarea>
+          </div>
+
+          <button id="analyze" class="btn primary block">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 10l-5.1 2.1L12 17l-1.9-4.9L5 10l5.1-2.1L12 3z"/></svg>
+            Analyze My Copy
+          </button>
+          <p class="tool-hint">Get instant feedback on clarity, hook strength, urgency, and brand fit.</p>
+        </div>
+
+        <div class="tool-score-col">
+          <div class="gauge-wrap">
+            <svg viewBox="0 0 118 118">
+              <circle class="gauge-track" cx="59" cy="59" r="50"/>
+              <circle class="gauge-fill" id="gauge-fill" cx="59" cy="59" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+            </svg>
+            <div class="gauge-num">
+              <span class="val" id="overall-score">—</span>
+              <span class="max">/100</span>
+            </div>
+          </div>
+          <div class="score-label">Overall Score</div>
+        </div>
       </div>
-      <div class="scores" id="scores"></div>
-      <div class="margin-notes" id="notes">
-        <div class="section-label" style="margin-bottom:14px;">Margin Notes</div>
-        <div id="notes-list"></div>
+
+      <div class="loading-row" id="loading">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span>Marking up the copy&hellip;</span>
       </div>
-      <div class="rewrite">
-        <div class="section-label">Rewrite</div>
-        <p id="rewrite-text">&mdash;</p>
+      <div id="tool-error"></div>
+
+      <div id="results">
+        <div class="verdict" id="verdict-text">—</div>
+        <div class="mini-scores" id="scores"></div>
+        <div class="notes-list" id="notes-list"></div>
+        <div class="rewrite-block">
+          <div class="section-label">Rewrite</div>
+          <p id="rewrite-text">—</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="cases" class="alt">
-  <div class="wrap">
-    <div class="section-label">Portfolio &mdash; 02</div>
-    <h2 class="section-title">Case Studies</h2>
-    <div class="cases">
-      <div class="case">
-        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v14L3 15v-4z"/><path d="M7 15v4a2 2 0 0 0 2 2h1v-6"/></svg></div>
-        <div class="tag">Campaign</div>
-        <h3>Placeholder Campaign Name</h3>
-        <p>Swap this in for a real campaign: what the goal was, what you actually did, and what changed as a result.</p>
-        <div class="metrics">
-          <div><b>+00%</b><span>Metric One</span></div>
-          <div><b>+00%</b><span>Metric Two</span></div>
-        </div>
+<section id="about" class="section wrap">
+  <div class="card about-card">
+    <div class="avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+    </div>
+    <div>
+      <h3>About Me</h3>
+      <p>I'm a marketing [student/professional] based in [your city], focused on the place where marketing strategy meets data and AI. I care about clear positioning and good copy, but I also like understanding how the tools behind a campaign actually work — which is what led me to start building instead of just describing.</p>
+    </div>
+  </div>
+</section>
+
+<section id="building" class="section wrap">
+  <div class="section-head">
+    <h2>Things I'm Building</h2>
+    <p>A collection of AI-powered marketing tools and experiments.</p>
+  </div>
+  <div class="cards-grid">
+    <div class="build-card">
+      <div class="build-card-top">
+        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+        <span class="badge live">Live</span>
       </div>
-      <div class="case">
-        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
-        <div class="tag">Content</div>
-        <h3>Placeholder Project Name</h3>
-        <p>Same here &mdash; a short, specific before/after. Recruiters skim; make the number do the talking.</p>
-        <div class="metrics">
-          <div><b>00k</b><span>Metric One</span></div>
-          <div><b>+00%</b><span>Metric Two</span></div>
-        </div>
-      </div>
-      <div class="case">
+      <h4>AI Copy Desk</h4>
+      <p>Improve marketing copy with live AI feedback, scoring, and suggested rewrites.</p>
+      <a href="#copy-desk-tool" class="link-arrow">Try it now →</a>
+    </div>
+
+    <div class="build-card">
+      <div class="build-card-top">
         <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M7 15l3-4 3 3 4-6"/></svg></div>
-        <div class="tag">Analytics</div>
-        <h3>Placeholder Dashboard</h3>
-        <p>A good slot for a dashboard you built &mdash; link it live if you can, or drop in a screenshot with the story.</p>
-        <div class="metrics">
-          <div><b>00</b><span>Data Sources</span></div>
-          <div><b>00%</b><span>Time Saved</span></div>
-        </div>
+        <span class="badge progress">In Progress</span>
       </div>
+      <h4>Chart Narrator</h4>
+      <p>Upload a chart screenshot and get clear insights, key takeaways, and next steps.</p>
+      <span class="link-arrow disabled">Preview coming soon →</span>
     </div>
-  </div>
-</section>
 
-<section id="skills">
-  <div class="wrap">
-    <div class="section-label">Toolkit &mdash; 03</div>
-    <h2 class="section-title">What I Bring / What I'm Building</h2>
-    <div class="skills-grid">
-      <div class="skill">
-        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.5"/></svg></div>
-        <h4>Marketing</h4>
-        <p>Positioning, copywriting, campaign strategy, audience research &mdash; replace with your real strengths.</p>
-      </div>
-      <div class="skill">
+    <div class="build-card">
+      <div class="build-card-top">
         <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 10l-5.1 2.1L12 17l-1.9-4.9L5 10l5.1-2.1L12 3z"/></svg></div>
-        <h4>AI &amp; Automation</h4>
-        <p>Prompting AI tools to do real marketing work &mdash; the Copy Desk above is a live example, not a mockup.</p>
+        <span class="badge soon">Coming Soon</span>
       </div>
-      <div class="skill">
-        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg></div>
-        <h4>Data &amp; Dashboards</h4>
-        <p>Reading performance data and turning it into a story &mdash; add real dashboards as you build them.</p>
-      </div>
-      <div class="skill">
-        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg></div>
-        <h4>Web Building</h4>
-        <p>This page. Built by hand, not a template &mdash; a small proof that you can ship, not just plan.</p>
-      </div>
+      <h4>More Experiments</h4>
+      <p>Always exploring new ideas around marketing, data, automation, and AI.</p>
+      <span class="link-arrow disabled">See what's next →</span>
     </div>
   </div>
 </section>
 
-<section id="contact" class="alt">
-  <div class="wrap">
-    <div class="contact-banner">
-      <div>
-        <h2>Let's talk.</h2>
-        <p>Built as a working prototype &mdash; swap the name, case studies, and links with your own before publishing.</p>
-      </div>
-      <div class="contact-links">
-        <a href="mailto:you@example.com" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Email</a>
-        <a href="#" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 13v4"/></svg>LinkedIn</a>
-        <a href="#" class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Resume (PDF)</a>
-      </div>
+<section class="section wrap">
+  <div class="card why-card">
+    <h3>Why I Built Them</h3>
+    <p>During my internship, I noticed how much time marketing teams spend on repetitive tasks — reviewing copy, organizing data, checking websites, creating reports. That curiosity led me to start building AI tools that automate parts of those workflows. My goal isn't to replace marketers — it's to help them spend <span class="accent">less time on manual work</span> and <span class="accent">more time on strategy and decisions</span>.</p>
+  </div>
+</section>
+
+<section id="contact" class="section wrap">
+  <div class="card contact-card">
+    <div>
+      <h3>Let's connect!</h3>
+      <p>I'm always open to new opportunities and exciting projects. Let's build something great together.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:you@example.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        you@example.com
+      </a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 13v4"/></svg>
+        linkedin.com/in/yourname
+      </a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Download Resume
+      </a>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="wrap">
-    <div class="fine">
-      <span>Curious, builder mindset, always shipping.</span>
-      <span>&copy; 2026 Your Name Here</span>
-    </div>
-  </div>
-</footer>
+<footer>&copy; 2026 Your Name. All rights reserved.</footer>
 
 <script>
-const btn = document.getElementById('analyze');
+/* ---------- Theme toggle (in-memory only) ---------- */
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+let isDark = false;
+themeToggle.addEventListener('click', () => {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  themeIcon.innerHTML = isDark
+    ? '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>'
+    : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+});
+
+/* ---------- Char counter ---------- */
 const input = document.getElementById('copy-input');
+const charCount = document.getElementById('char-count');
+function updateCharCount(){ charCount.textContent = input.value.length; }
+input.addEventListener('input', updateCharCount);
+updateCharCount();
+
+/* ---------- Brand voice toggle ---------- */
+const brandToggle = document.getElementById('brand-toggle');
+const brandWrap = document.getElementById('brand-context-wrap');
+brandToggle.addEventListener('click', () => {
+  brandWrap.classList.toggle('hidden');
+  brandToggle.textContent = brandWrap.classList.contains('hidden')
+    ? '+ Add brand voice / audience (optional)'
+    : '− Hide brand voice / audience';
+});
+
+/* ---------- Gauge helpers ---------- */
+const gaugeFill = document.getElementById('gauge-fill');
+const overallScoreEl = document.getElementById('overall-score');
+const CIRC = 2 * Math.PI * 50; // r=50
+function setGauge(value){
+  const pct = Math.max(0, Math.min(100, value));
+  const offset = CIRC - (CIRC * pct / 100);
+  gaugeFill.style.strokeDasharray = CIRC;
+  gaugeFill.style.strokeDashoffset = offset;
+  overallScoreEl.textContent = Math.round(pct);
+}
+
+/* ---------- Analyze ---------- */
+const btn = document.getElementById('analyze');
+const brandInput = document.getElementById('brand-context');
 const loading = document.getElementById('loading');
 const results = document.getElementById('results');
 const errorBox = document.getElementById('tool-error');
-
-const brandInput = document.getElementById('brand-context');
 
 btn.addEventListener('click', async () => {
   const copy = input.value.trim();
@@ -371,10 +460,9 @@ btn.addEventListener('click', async () => {
   loading.classList.add('show');
   btn.disabled = true;
 
-  // When no brand context is given, we don't ask the AI to invent a "Brand Fit"
-  // score out of nothing. Instead we ask for "Tone Consistency" — whether the
-  // copy's own voice holds together internally — which is something the AI
-  // can actually assess without external information.
+  // If no brand context is given, we don't ask the AI to invent a "Brand Fit"
+  // score from nothing. We ask for "Tone Consistency" instead — something it
+  // can actually assess without outside information.
   const fourthMetricKey = hasBrand ? "brand_fit" : "tone_consistency";
   const fourthMetricInstruction = hasBrand
     ? `"brand_fit": <0-100 integer, how well the copy matches this brand voice/audience: "${brand}">`
@@ -399,8 +487,6 @@ btn.addEventListener('click', async () => {
 Give 2 to 4 notes. Copy to review: "${copy}"`;
 
   try {
-    // This calls OUR OWN backend (api/analyze.js), which holds the real API key.
-    // The browser never sees the key — this is the safe pattern for any AI-powered site.
     const response = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -427,8 +513,6 @@ function renderResults(data, fourthMetricKey){
   document.getElementById('verdict-text').textContent = data.verdict || "—";
   document.getElementById('rewrite-text').textContent = data.rewrite || "—";
 
-  const scoresEl = document.getElementById('scores');
-  scoresEl.innerHTML = "";
   const labels = {
     clarity: "Clarity",
     hook_strength: "Hook Strength",
@@ -436,20 +520,25 @@ function renderResults(data, fourthMetricKey){
     brand_fit: "Brand Fit",
     tone_consistency: "Tone Consistency"
   };
-  const keysToShow = ["clarity", "hook_strength", "urgency", fourthMetricKey];
-  keysToShow.filter(k => k).map(k => [k, labels[k]]).forEach(([key, label]) => {
-    const val = (data.scores && data.scores[key]) || 0;
+  const keys = ["clarity", "hook_strength", "urgency", fourthMetricKey];
+  const vals = keys.map(k => (data.scores && data.scores[k]) || 0);
+
+  const overall = Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
+  setGauge(overall);
+
+  const scoresEl = document.getElementById('scores');
+  scoresEl.innerHTML = "";
+  keys.forEach((key, i) => {
+    const val = vals[i];
     const el = document.createElement('div');
-    el.className = 'score';
+    el.className = 'mini-score';
     el.innerHTML = `
-      <div class="num">${val}<span>/100</span></div>
+      <div class="num">${val}</div>
       <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
-      <div class="label">${label}</div>
+      <div class="label">${labels[key]}</div>
     `;
     scoresEl.appendChild(el);
-    requestAnimationFrame(() => {
-      el.querySelector('.bar-fill').style.width = val + '%';
-    });
+    requestAnimationFrame(() => { el.querySelector('.bar-fill').style.width = val + '%'; });
   });
 
   const notesList = document.getElementById('notes-list');
